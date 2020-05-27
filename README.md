@@ -1,7 +1,7 @@
 # Stochastic-Shortest-Path
 Reimplementation of a fast approximation algorithm for stochastic shortest path problem.
 
-Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references).
+Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references)
 
 ## References
 
