@@ -1,6 +1,6 @@
 # Stochastic-Shortest-Path
 
-Maximizing the probability that the path length does not exceed a given threshold value (deadline).
+Computing paths that maximize the probability of arriving at a destination before a given time deadline.
 
 Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,092 nodes and 9,453 edges. Edges lengths are drawn from normal distributions.
 
