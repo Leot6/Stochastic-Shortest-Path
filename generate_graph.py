@@ -36,19 +36,27 @@ def load_Manhattan_graph():
         v = edge['sink']
         u_pos = np.array([nodes.iloc[u - 1]['lng'], nodes.iloc[u - 1]['lat']])
         v_pos = np.array([nodes.iloc[v - 1]['lng'], nodes.iloc[v - 1]['lat']])
-        G.add_node(u, pos=u_pos)
-        G.add_node(v, pos=v_pos)
 
         mean_travel_time = round(mean_travel_times.iloc[i], 2)
         std = round(std_travel_times.iloc[i], 2)
+        travel_dist = round(get_haversine_distance(u_pos[0], u_pos[1], v_pos[0], v_pos[1]), 2)
+
+        coe = round(mean_travel_time / travel_dist, 2)
+        # print(mean_travel_time, travel_dist, coe)
 
         # artificial variance
-        variance = round(std * 0.3, 2)
-        # variance = round(mean_travel_time / 100 * random.randint(10, 90), 2)
-        print('mean', mean_travel_time, 'std', std, 'var', variance)
+        variance = round(std * 2 * coe, 2)
 
-        travel_dist = get_haversine_distance(u_pos[0], u_pos[1], v_pos[0], v_pos[1])
+        # variance = round(mean_travel_time / 100 * random.randint(10, 90), 2)
+        # print('mean', mean_travel_time, 'std', std, 'var', variance)
+        # print(u, v, 'mean_travel_time', mean_travel_time, 'std', std, 'travel_dist', travel_dist)
+        if mean_travel_time < 5:
+            mean_travel_time += 5
+        if variance < 1:
+            variance += 1
         G.add_edge(u, v, dur=mean_travel_time, var=variance, dist=travel_dist)
+        G.add_node(u, pos=u_pos)
+        G.add_node(v, pos=v_pos)
 
     # store_map_as_pickle_file
     with open('NYC_NET.pickle', 'wb') as f:

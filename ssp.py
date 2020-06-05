@@ -7,7 +7,6 @@ import pickle
 import copy
 import math
 import numpy as np
-import pandas as pd
 import networkx as nx
 
 with open('NYC_NET.pickle', 'rb') as f:
@@ -65,7 +64,7 @@ def get_lemada_optimal_path(lemada, onid, dnid):
 
 # the cumulative distribution function (CDF) of the standard normal distribution
 def get_path_phi(d, m, v):
-    return round((d-m)/(math.sqrt(v)), 2)
+    return round((d-m)/(math.sqrt(v)), 4)
 
 
 # compute path that maximize the probability of arriving at a destination before a given time deadline
@@ -80,34 +79,32 @@ def stochastic_shortest_path(d, onid, dnid):
         l:left
         r:right
     """
-    best_path = []
-    phi_best = 0
+
     candidate_regions = []
     path_0, m_0, v_0 = get_lemada_optimal_path(0, onid, dnid)
+    phi_0 = get_path_phi(d, m_0, v_0)
     path_inf, m_inf, v_inf = get_lemada_optimal_path(np.inf, onid, dnid)
+    phi_inf = get_path_phi(d, m_inf, v_inf)
 
     if path_0 == path_inf:
-        # print('Case 1: path_0 == path_inf !!!')
         return path_0
+    elif phi_0 > phi_inf:
+        best_path = path_0
+        phi_best = phi_0
+    else:
+        best_path = path_inf
+        phi_best = phi_inf
 
-    phi_0 = get_path_phi(d, m_0, v_0)
-    phi_inf = get_path_phi(d, m_inf, v_inf)
     # print('m_0', m_0, 'v_0', v_0, 'phi_path_0', phi_0)
     # print('m_inf', m_inf, 'v_inf', v_inf, 'phi_path_inf', phi_inf)
-    if phi_0 < phi_inf:
-        print('Case 2: path_inf is better than path_0 !!!')
-        quit()
 
     # region: (left path, right path)
     candidate_regions.append(((m_0, v_0), (m_inf, v_inf)))
 
     while len(candidate_regions) != 0:
         region = candidate_regions.pop()
-        # print('current region', region)
         (m_l, v_l), (m_r, v_r) = region
-        # print('m_l, v_l, m_r, v_r', m_l, v_l, m_r, v_r)
         phi_probe = get_path_phi(d, m_l, v_r)
-        # print('phi_probe', phi_probe)
 
         if phi_probe < phi_best:
             continue
@@ -127,21 +124,24 @@ def stochastic_shortest_path(d, onid, dnid):
             candidate_regions.append(((m, v), (m_r, v_r)))
 
         # print('lemada', lemada, 'm', m, 'v', v, 'phi_path', phi_path)
-
+        # if lemada > 564:
+        #     print('case: large lemada!!')
+        #     quit()
     return best_path
 
 
 if __name__ == '__main__':
-    onid = 12
-    dnid = 3788
-    d = get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.2
+    onid = 2
+    dnid = 1644
+    d = get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.1
 
     start_time = time.time()
 
     best_path = stochastic_shortest_path(d, onid, dnid)
     m_best, v_best = get_path_mean_and_var(best_path)
+    # # print('m_best, v_best', best_path, m_best, v_best)
     phi_best = get_path_phi(d, m_best, v_best)
-    # print('m_best, v_best, phi_best', m_best, v_best, phi_best)
-    # print('best_path', best_path)
+    print('m_best, v_best, phi_best', m_best, v_best, phi_best)
+    # # print('best_path', best_path)
 
     print('...running time : %.05f seconds' % (time.time() - start_time))
