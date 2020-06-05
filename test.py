@@ -2,7 +2,6 @@
 try to find out the percentage of how many trips would have a different path than the shortest path
 """
 
-import pickle
 import numpy as np
 import scipy.stats as st
 from tqdm import tqdm
@@ -10,13 +9,7 @@ from tqdm import tqdm
 from ssp import get_the_minimum_duration_path, get_the_minimum_duration_path_length, stochastic_shortest_path, \
     get_path_mean_and_var, get_path_phi
 from assp_quary import approximated_stochastic_shortest_path
-
-with open('NYC_NET.pickle', 'rb') as f:
-    NYC_NET = pickle.load(f)
-with open('NYC_NOD_LOC.pickle', 'rb') as f:
-    NOD_LOC = pickle.load(f)
-with open('NYC_REQ_DATA_20160501.pickle', 'rb') as f:
-    REQ_DATA = pickle.load(f)
+from graph import NYC_NET, NOD_LOC, REQ_DATA
 
 
 # find the nearest node to[lng, lat] in Manhattan network

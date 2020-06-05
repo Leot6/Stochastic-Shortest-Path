@@ -3,16 +3,14 @@ efficiently compute the approximated stochastic shortest path - precomputing par
 """
 
 import time
-import pickle
 import copy
 import math
 import numpy as np
 import pandas as pd
 import networkx as nx
 from tqdm import tqdm
+from graph import NYC_NET
 
-with open('NYC_NET.pickle', 'rb') as f:
-    NYC_NET = pickle.load(f)
 G = copy.deepcopy(NYC_NET)
 
 

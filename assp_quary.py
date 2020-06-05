@@ -3,13 +3,11 @@ efficiently compute the approximated stochastic shortest path - precomputing par
 """
 
 import time
-import pickle
 import copy
 import numpy as np
 from ssp import get_lemada_optimal_path, get_path_phi, get_the_minimum_duration_path_length, get_path_mean_and_var
+from graph import NYC_NET
 
-with open('NYC_NET.pickle', 'rb') as f:
-    NYC_NET = pickle.load(f)
 G = copy.deepcopy(NYC_NET)
 
 
