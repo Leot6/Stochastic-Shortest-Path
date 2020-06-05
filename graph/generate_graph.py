@@ -22,9 +22,9 @@ def get_haversine_distance(olng, olat, dlng, dlat):
 def load_Manhattan_graph():
     aa = time.time()
     print('Loading edges and nodes data...')
-    edges = pd.read_csv('./graph/edges.csv')
-    nodes = pd.read_csv('./graph/nodes.csv')
-    travel_time_edges = pd.read_csv('./graph/time-on-week.csv', index_col=0)
+    edges = pd.read_csv('edges.csv')
+    nodes = pd.read_csv('nodes.csv')
+    travel_time_edges = pd.read_csv('time-on-week.csv', index_col=0)
     # consider the travels times on different hours as samples, and compute the sample mean and standard deviation
     mean_travel_times = travel_time_edges.mean(1)
     std_travel_times = travel_time_edges.std(1)

@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 from ssp import get_the_minimum_duration_path, get_the_minimum_duration_path_length, stochastic_shortest_path, \
     get_path_mean_and_var, get_path_phi
-from assp_quary import approximated_stochastic_shortest_path
+from assp_query import approximated_stochastic_shortest_path
 from graph import NYC_NET, NOD_LOC, REQ_DATA
 
 
@@ -57,7 +57,7 @@ def find_out_how_many_trips_will_have_a_differnt_path():
     while True:
         req_idx += 1
         onid, dnid = load_trip(req_idx)
-        d = round(get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.1, 2)
+        d = round(get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.2, 2)
         shortest_path = get_the_minimum_duration_path(NYC_NET, onid, dnid)
         best_path = stochastic_shortest_path(d, onid, dnid)
         m_shortest, v_shortest = get_path_mean_and_var(shortest_path)
