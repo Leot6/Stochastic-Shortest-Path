@@ -2,6 +2,7 @@
 try to find out the percentage of how many trips would have a different path than the shortest path
 """
 
+import time
 import numpy as np
 import scipy.stats as st
 from tqdm import tqdm
@@ -50,9 +51,12 @@ def find_out_how_many_trips_will_have_a_differnt_path():
     num_1_5 = 0
     num_2 = 0
 
-    average_mean = 0
-    average_var = 0
-    average_cdf = 0
+    average_mean_sp = 0
+    average_var_sp = 0
+    average_cdf_sp = 0
+    average_mean_rp = 0
+    average_var_rp = 0
+    average_cdf_rp = 0
 
     while True:
         req_idx += 1
@@ -65,9 +69,12 @@ def find_out_how_many_trips_will_have_a_differnt_path():
         cdf_shortest = normal_cdf(d, shortest_path)
         cdf_best = normal_cdf(d, best_path)
 
-        average_mean += m_shortest
-        average_var += v_shortest
-        average_cdf += cdf_shortest
+        average_mean_sp += m_shortest
+        average_var_sp += v_shortest
+        average_cdf_sp += cdf_shortest
+        average_mean_rp += m_best
+        average_var_rp += v_best
+        average_cdf_rp += cdf_best
 
         if shortest_path != best_path:
             num_different += 1
@@ -87,12 +94,12 @@ def find_out_how_many_trips_will_have_a_differnt_path():
             elif difference > 0.5:
                 num_0_5 += 1
             print('req_index', req_idx, 'd', d, 'cdf_shortest', cdf_shortest, 'cdf_best', cdf_best)
-            print('   average_mean:', round(average_mean / req_idx, 2))
-            print('   average_var:', round(average_var / req_idx, 2))
-            print('   average_cdf:', round(average_cdf / req_idx, 2))
+            print('   average_mean (sp, rp):', round(average_mean_sp / req_idx, 2), round(average_mean_rp / req_idx, 2))
+            print('   average_var (sp, rp):', round(average_var_sp / req_idx, 2), round(average_var_rp / req_idx, 2))
+            print('   average_cdf (sp, rp):', round(average_cdf_sp / req_idx, 2), round(average_cdf_rp / req_idx, 2))
             print('   m_shortest, v_shortest:', (m_shortest, v_shortest), 'm_best, v_best:', (m_best, v_best))
-            print('   fraction:', round(num_different/req_idx, 3), round(num_0_5/req_idx, 3), round(num_1/req_idx, 3),
-                  round(num_1_5/req_idx, 3), round(num_2/req_idx, 3))
+            print('   different fraction:', round(num_different/req_idx, 3), round(num_0_5/req_idx, 3),
+                  round(num_1/req_idx, 3), round(num_1_5/req_idx, 3), round(num_2/req_idx, 3))
 
 
 def normal_cdf(d, path):
@@ -100,6 +107,7 @@ def normal_cdf(d, path):
     return round(st.norm(mean, var).cdf(d), 4)
 
 
+# find out the approximation quality, defined as the difference between the optimal solution (SSP) and ASSP
 def verify_ssp_assp():
     k = [0.2667, 0.3333, 0.4167, 0.5208, 0.651, 0.8138, 1.0173, 1.2716, 1.5895, 1.9868, 2.4835, 3.1044, 3.8805,
          4.8506, 6.0633, 7.5791, 9.4739, 11.8424, 14.803, 18.5037, 23.1296, 28.9121, 36.1401, 45.1751, 56.4689,
@@ -127,6 +135,9 @@ def verify_ssp_assp():
 
 
 if __name__ == '__main__':
+    start_time = time.time()
 
     find_out_how_many_trips_will_have_a_differnt_path()
     # verify_ssp_assp()
+
+    print('...running time : %.05f seconds' % (time.time() - start_time))

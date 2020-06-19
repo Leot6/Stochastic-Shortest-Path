@@ -7,6 +7,7 @@ import copy
 import math
 import numpy as np
 import networkx as nx
+import scipy.stats as st
 from graph import NYC_NET
 
 G = copy.deepcopy(NYC_NET)
@@ -63,6 +64,11 @@ def get_lemada_optimal_path(lemada, onid, dnid):
 # the cumulative distribution function (CDF) of the standard normal distribution
 def get_path_phi(d, m, v):
     return round((d-m)/(math.sqrt(v)), 4)
+
+
+def normal_cdf(d, path):
+    mean, var = get_path_mean_and_var(path)
+    return round(st.norm(mean, var).cdf(d), 4)
 
 
 # compute path that maximize the probability of arriving at a destination before a given time deadline
@@ -129,9 +135,10 @@ def stochastic_shortest_path(d, onid, dnid):
 
 
 if __name__ == '__main__':
-    onid = 2
-    dnid = 1644
-    d = get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.1
+    onid = 100
+    dnid = 2244
+    d = get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.2
+    print('deadline', d)
 
     start_time = time.time()
 
@@ -141,5 +148,7 @@ if __name__ == '__main__':
     phi_best = get_path_phi(d, m_best, v_best)
     print('m_best, v_best, phi_best', m_best, v_best, phi_best)
     # # print('best_path', best_path)
+    cdf_best = normal_cdf(d, best_path)
+    print('cdf:', cdf_best)
 
     print('...running time : %.05f seconds' % (time.time() - start_time))

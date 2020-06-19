@@ -41,15 +41,14 @@ def load_Manhattan_graph():
         std = round(std_travel_times.iloc[i], 2)
         travel_dist = round(get_haversine_distance(u_pos[0], u_pos[1], v_pos[0], v_pos[1]), 2)
 
-        coe = round(mean_travel_time / travel_dist, 2)
+        unit_travel_time = round(mean_travel_time / travel_dist, 4)
         # print(mean_travel_time, travel_dist, coe)
 
         # artificial variance
-        variance = round(std * 2 * coe, 2)
+        variance1 = round(std * 2 * unit_travel_time, 2)
+        variance = round(100 * unit_travel_time ** 2, 2)
+        print(u, v, 'mean_travel_time', mean_travel_time, 'std', std, 'travel_dist', travel_dist, 'var', variance, variance1)
 
-        # variance = round(mean_travel_time / 100 * random.randint(10, 90), 2)
-        # print('mean', mean_travel_time, 'std', std, 'var', variance)
-        # print(u, v, 'mean_travel_time', mean_travel_time, 'std', std, 'travel_dist', travel_dist)
         if mean_travel_time < 5:
             mean_travel_time += 5
         if variance < 1:
