@@ -31,7 +31,7 @@
 *.out
 *.app
 
-_pycache_/
+__pycache__/
 .idea/
 .DS_Store
 precomputed_tables/
