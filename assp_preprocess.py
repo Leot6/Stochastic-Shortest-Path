@@ -196,9 +196,9 @@ def precompute_tables(K):
         len_paths = dict(nx.all_pairs_dijkstra(G, cutoff=None, weight='dur'))
         print(' writing table value...')
         lemada_path_table, mean_table, var_table = compute_tables(len_paths, nodes=NYC_NOD)
-        lemada_path_table.to_csv('./precomputed_tables/lemada_path_table_' + str(i) + '.csv')
-        mean_table.to_csv('./precomputed_tables/mean_table_' + str(i) + '.csv')
-        var_table.to_csv('./precomputed_tables/var_table_' + str(i) + '.csv')
+        lemada_path_table.to_csv('./precomputed-tables/lemada_path_table_' + str(i) + '.csv')
+        mean_table.to_csv('./precomputed-tables/mean_table_' + str(i) + '.csv')
+        var_table.to_csv('./precomputed-tables/var_table_' + str(i) + '.csv')
 
 
 if __name__ == '__main__':
