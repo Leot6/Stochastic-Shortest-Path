@@ -30,6 +30,8 @@
 *.exe
 *.out
 *.app
-precomputed_tables/
+
+_pycache_/
 .idea/
 .DS_Store
+precomputed_tables/
