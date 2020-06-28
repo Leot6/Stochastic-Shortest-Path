@@ -10,8 +10,10 @@ import pandas as pd
 import networkx as nx
 from tqdm import tqdm
 from graph import NYC_NET
+from ssp import get_path_mean_and_var
 
 G = copy.deepcopy(NYC_NET)
+NYC_NOD = pd.read_csv('./graph/nodes.csv')
 
 
 # given a path, return its variance
@@ -114,27 +116,99 @@ def compute_parameter_set_k_probability():
     return k
 
 
-def compute_shortest_time_table(len_paths, nodes=None):
+# def compute_shortest_time_table(len_paths, nodes=NYC_NOD):
+#     # nodes = pd.read_csv('nodes.csv')
+#     nodes_id = list(range(1, nodes.shape[0] + 1))
+#     num_nodes = len(nodes_id)
+#     shortest_time_table = pd.DataFrame(-np.ones((num_nodes, num_nodes)), index=nodes_id, columns=nodes_id)
+#     for o in tqdm(nodes_id, desc='time-table'):
+#         for d in tqdm(nodes_id):
+#             try:
+#                 duration = round(len_paths[o][0][d], 2)
+#                 shortest_time_table.iloc[o - 1, d - 1] = duration
+#             except nx.NetworkXNoPath:
+#                 print('no path between', o, d)
+#     # shortest_time_table.to_csv('time-table-new.csv')
+#     return shortest_time_table
+#
+#
+# def compute_shortest_path_table(len_paths, nodes=NYC_NOD):
+#     # nodes = pd.read_csv('nodes.csv')
+#     nodes_id = list(range(1, nodes.shape[0] + 1))
+#     num_nodes = len(nodes_id)
+#     shortest_path_table = pd.DataFrame(-np.ones((num_nodes, num_nodes), dtype=int), index=nodes_id, columns=nodes_id)
+#     for o in tqdm(nodes_id, desc='path-table'):
+#         for d in tqdm(nodes_id):
+#             try:
+#                 path = len_paths[o][1][d]
+#                 if len(path) == 1:
+#                     continue
+#                 else:
+#                     pre_node = path[-2]
+#                     shortest_path_table.iloc[o - 1, d - 1] = pre_node
+#             except nx.NetworkXNoPath:
+#                 print('no path between', o, d)
+#     # shortest_path_table.to_csv('path-table-new.csv')
+#     return shortest_path_table
+
+
+def compute_tables(len_paths, nodes=NYC_NOD):
     # nodes = pd.read_csv('nodes.csv')
     nodes_id = list(range(1, nodes.shape[0] + 1))
     num_nodes = len(nodes_id)
-    shortest_time_table = pd.DataFrame(-np.ones((num_nodes, num_nodes)), index=nodes_id, columns=nodes_id)
-    for o in tqdm(nodes_id, desc='time-table'):
-        for d in tqdm(nodes_id):
+    lemada_path_table = pd.DataFrame(-np.ones((num_nodes, num_nodes), dtype=int), index=nodes_id, columns=nodes_id)
+    mean_table = pd.DataFrame(-np.ones((num_nodes, num_nodes)), index=nodes_id, columns=nodes_id)
+    var_table = pd.DataFrame(-np.ones((num_nodes, num_nodes)), index=nodes_id, columns=nodes_id)
+    for o in tqdm(nodes_id, desc='path-table row'):
+        for d in tqdm(nodes_id, desc='path-table column'):
             try:
-                duration = round(len_paths[o][0][d], 2)
-                shortest_time_table.iloc[o - 1, d - 1] = duration
+                path = len_paths[o][1][d]
+                if len(path) == 1:
+                    continue
+                else:
+                    pre_node = path[-2]
+                    lemada_path_table.iloc[o - 1, d - 1] = pre_node
+                mean, var = get_path_mean_and_var(path)
+                mean_table.iloc[o - 1, d - 1] = mean
+                var_table.iloc[o - 1, d - 1] = var
             except nx.NetworkXNoPath:
                 print('no path between', o, d)
-    shortest_time_table.to_csv('time-table-new.csv')
-    return shortest_time_table
+    # shortest_path_table.to_csv('path-table-new.csv')
+    return lemada_path_table, mean_table, var_table
+
+
+def precompute_tables(K):
+    for i in tqdm(range(0, len(K)), desc='precomputing tables:'):
+        lemada = K[i]
+        print(' updating lemada graph')
+        for u, v in G.edges():
+            dur = NYC_NET.get_edge_data(u, v, default={'dur': None})['dur']
+            var = NYC_NET.get_edge_data(u, v, default={'var': None})['var']
+            if dur is np.inf:
+                print('error: dur is np.inf !!!')
+                quit()
+            if lemada == np.inf:
+                weight = var
+            else:
+                weight = dur + lemada * var
+            G.edges[u, v]['dur'] = weight
+        print(' computing all_pairs_dijkstra...')
+        len_paths = dict(nx.all_pairs_dijkstra(G, cutoff=None, weight='dur'))
+        print(' writing table value...')
+        lemada_path_table, mean_table, var_table = compute_tables(len_paths, nodes=NYC_NOD)
+        lemada_path_table.to_csv('./precomputed_tables/lemada_path_table_' + str(i) + '.csv')
+        mean_table.to_csv('./precomputed_tables/mean_table_' + str(i) + '.csv')
+        var_table.to_csv('./precomputed_tables/var_table_' + str(i) + '.csv')
 
 
 if __name__ == '__main__':
     start_time = time.time()
     # find_the_largest_var_of_any_path()
 
-    compute_parameter_set_k_mean_risk()
-    compute_parameter_set_k_probability()
+    # compute_parameter_set_k_mean_risk()
+    # compute_parameter_set_k_probability()
+    K = [0, 0.2, 0.3155, 0.4976, 0.7849, 1.2381, 1.9529, 3.0803, 4.8588, 7.664, 12.0888, 19.0683, 30.0774, 47.4425,
+         74.8335, 118.0386, 186.1882, 293.684, 463.2426, 705, np.inf]
+    precompute_tables(K)
 
     print('...running time : %.05f seconds' % (time.time() - start_time))

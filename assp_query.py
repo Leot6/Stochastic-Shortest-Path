@@ -11,8 +11,9 @@ from graph import NYC_NET
 G = copy.deepcopy(NYC_NET)
 
 
-# compute path that maximize the probability of arriving at a destination before a given time deadline
-def approximated_stochastic_shortest_path(k, d, onid, dnid):
+# compute path that maximize the probability of arriving at a destination before a given time deadline,
+# computing on-the-fly
+def approximated_stochastic_shortest_path(K, d, onid, dnid):
     """
     Attributes:
         k:

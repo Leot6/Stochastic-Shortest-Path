@@ -61,11 +61,11 @@ def get_lemada_optimal_path(lemada, onid, dnid):
     return path, mean, var
 
 
-# the cumulative distribution function (CDF) of the standard normal distribution
 def get_path_phi(d, m, v):
     return round((d-m)/(math.sqrt(v)), 4)
 
 
+# the cumulative distribution function (CDF) of the standard normal distribution
 def normal_cdf(d, path):
     mean, var = get_path_mean_and_var(path)
     return round(st.norm(mean, var).cdf(d), 4)

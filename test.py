@@ -109,7 +109,7 @@ def normal_cdf(d, path):
 
 # find out the approximation quality, defined as the difference between the optimal solution (SSP) and ASSP
 def verify_ssp_assp():
-    k = [0.2667, 0.3333, 0.4167, 0.5208, 0.651, 0.8138, 1.0173, 1.2716, 1.5895, 1.9868, 2.4835, 3.1044, 3.8805,
+    K = [0.2667, 0.3333, 0.4167, 0.5208, 0.651, 0.8138, 1.0173, 1.2716, 1.5895, 1.9868, 2.4835, 3.1044, 3.8805,
          4.8506, 6.0633, 7.5791, 9.4739, 11.8424, 14.803, 18.5037, 23.1296, 28.9121, 36.1401, 45.1751, 56.4689,
          70.5861, 88.2326, 110.2907, 137.8634, 172.3293, 215.4116, 269.2645, 336.5807, 420.7258, 525.9073, 564.0]
     # k = [0.2, 0.3155, 0.4976, 0.7849, 1.2381, 1.9529, 3.0803, 4.8588, 7.664, 12.0888, 19.0683, 30.0774, 47.4425,
@@ -124,7 +124,7 @@ def verify_ssp_assp():
         onid, dnid = load_trip(req_idx)
         d = round(get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.2, 2)
         path1 = stochastic_shortest_path(d, onid, dnid)
-        path2 = approximated_stochastic_shortest_path(k, d, onid, dnid)
+        path2 = approximated_stochastic_shortest_path(K, d, onid, dnid)
         if path1 != path2:
             num_different += 1
             m1, v1 = get_path_mean_and_var(path1)
