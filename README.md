@@ -2,7 +2,7 @@
 
 Computing paths that maximize the probability of arriving at a destination before a given time deadline.
 
-Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,092 nodes and 9,453 edges. Edges lengths are drawn from normal distributions.
+Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,092 nodes and 9,453 edges. Edges lengths are drawn from normal distributions. 
 
 The main function in `generate_graph.py` will generate the stochastic travel model using data from folder `graph`. A sample graph is ready to use in the root folder, named `NYC_NET.pickle`. `ssp.py` reimplement ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references), `assp_preprocess.py` and `assp_query.py` reimplement ref [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references). `test.py` is used to test how many taxi trips could find another path instead of the shortest mean path, and the difference between the results from `ssp` and `assp`.
 
