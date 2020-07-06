@@ -2,10 +2,8 @@
 
 Computing paths that maximize the probability of arriving at a destination before a given time deadline. The following figure shows an example of different paths from origin (node 100) to destination (node 2244), where the deadline is set to 1627.416 sec. The minimum expected time route (blue) takes 1356.18 sec with 89.06% guarantee of arriving on time,  and the variance of it is 220.58 sec. The maximum probability route (orange) takes 1361.43 sec with 90.45% guarantee of arriving on time, and the variance of it is 202.62 sec. The green path is the minimum variance route, and it takes 1488.68 sec with 79.2% guarantee of arriving on time, and the variance of it is 170.57 sec.
 
+<img src="https://github.com/Leot6/Stochastic-Shortest-Path/blob/master/example.png" width="600">
 
-1362.43  v_best, 202.62 
-
-The blue line is the minimum duration path of which the mean is 1356.18 sec , the variance is 220.58 sec and the pro. The orange line is the highest probability path of which the mean is 
 
 Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,092 nodes and 9,453 edges. Edges lengths are drawn from normal distributions. 
 
