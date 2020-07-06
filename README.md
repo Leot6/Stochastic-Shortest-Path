@@ -5,7 +5,9 @@ Computing paths that maximize the probability of arriving at a destination befor
 Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,092 nodes and 9,453 edges. Edges lengths are drawn from normal distributions. 
 
 `stochastic_shortest_path` reimplements ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references).
-`approximated_ssp_preprocess` and `approximated_ssp_query` reimplement ref [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references). `approximated_ssp_preprocess`will compute a set of lambda values, which is used to precompute a set of path tables to speed up the computation of ssp. The function to compute path table can be found at [Manhattan-Map](https://github.com/Leot6/Manhattan-Map)
+
+`approximated_ssp_preprocess` and `approximated_ssp_query` reimplement ref [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references). `approximated_ssp_preprocess`will compute a set of lambda values, which is used to precompute a set of path tables to speed up the computation of ssp. The function to compute path table can be found at [Manhattan-Map](https://github.com/Leot6/Manhattan-Map).
+
 `test.py` is used to test how many taxi trips could find another path instead of the shortest mean path, and the difference between the results from `ssp` and `assp`.
 
 ## References
