@@ -81,6 +81,9 @@ def stochastic_shortest_path(ddl, onid, dnid):
 
     candidate_regions = []
     path_0, mean_0, var_0 = get_lambda_optimal_path(0, onid, dnid)
+
+    print()
+
     phi_0 = get_path_phi(ddl, mean_0, var_0)
     path_inf, mean_inf, var_inf = get_lambda_optimal_path(np.inf, onid, dnid)
     phi_inf = get_path_phi(ddl, mean_inf, var_inf)
@@ -94,8 +97,11 @@ def stochastic_shortest_path(ddl, onid, dnid):
         best_path = path_inf
         phi_best = phi_inf
 
-    # print('mean_0', mean_0, 'var_0', var_0, 'phi_path_0', phi_0)
-    # print('mean_inf', mean_inf, 'var_inf', var_inf, 'phi_path_inf', phi_inf)
+    print('mean_0', mean_0, 'var_0', var_0, 'phi_path_0', phi_0, 'cdf_0', normal_cdf(ddl, path_0))
+    print('mean_inf', mean_inf, 'var_inf', var_inf, 'phi_path_inf', phi_inf, 'cdf_inf', normal_cdf(ddl, path_inf))
+
+    print('path_0', path_0)
+    print('path_inf', path_inf)
 
     # region: (left path, right path)
     candidate_regions.append(((mean_0, var_0), (mean_inf, var_inf)))
@@ -121,7 +127,7 @@ def stochastic_shortest_path(ddl, onid, dnid):
         if phi_probe_right > phi_best:
             candidate_regions.append(((mean_new, var_new), (mean_right, var_right)))
 
-        # print('lambda', lambda_value, 'm', mean_new, 'v', var_new, 'phi_path', phi_new)
+        print('lambda', lambda_value, 'm', mean_new, 'v', var_new, 'phi_path', phi_new)
         # if lambda_value > 564:
         #     print('case: large lambda!!')
         #     quit()
@@ -130,7 +136,7 @@ def stochastic_shortest_path(ddl, onid, dnid):
 
 if __name__ == '__main__':
     onid = 100
-    dnid = 3244
+    dnid = 2244
     d = get_the_minimum_duration_path_length(NETWORK, onid, dnid) * DEADLINE_COE
     print('deadline', d)
 
@@ -140,9 +146,8 @@ if __name__ == '__main__':
     m_best, v_best = get_path_mean_and_var(best_path)
     # # print('m_best, v_best', best_path, m_best, v_best)
     phi_best = get_path_phi(d, m_best, v_best)
-    print('m_best, v_best, phi_best', m_best, v_best, phi_best)
-    # # print('best_path', best_path)
-    cdf_best = normal_cdf(d, best_path)
-    print('cdf:', cdf_best)
+    print('m_best,', m_best, ' v_best,', v_best, ' phi_best', phi_best, 'cdf_best', normal_cdf(d, best_path))
+
+    print('path_best', best_path)
 
     print('...running time : %.05f seconds' % (time.time() - start_time))
