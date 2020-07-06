@@ -7,40 +7,10 @@ import numpy as np
 import scipy.stats as st
 from tqdm import tqdm
 
-from ssp import get_the_minimum_duration_path, get_the_minimum_duration_path_length, stochastic_shortest_path, \
-    get_path_mean_and_var, get_path_phi
-from assp_query import approximated_stochastic_shortest_path
-from graph import NYC_NET, NOD_LOC, REQ_DATA
-
-
-# find the nearest node to[lng, lat] in Manhattan network
-def find_nearest_node(lng, lat):
-    nearest_node_id = None
-    d = np.inf
-    for nid, nlng, nlat in NOD_LOC:
-        # d_ = get_haversine_distance(lng, lat, nlng, nlat)
-        d_ = abs(lng-nlng) + abs(lat-nlat)
-        if d_ < d:
-            d = d_
-            nearest_node_id = nid
-
-    if nearest_node_id is None:
-        print()
-        print('nearest_node_id not found')
-        print('coordination', lng, lat)
-        print('d', d)
-        print()
-    return int(nearest_node_id)
-
-
-def load_trip(req_idx):
-    olng = REQ_DATA.iloc[req_idx]['olng']
-    olat = REQ_DATA.iloc[req_idx]['olat']
-    dlng = REQ_DATA.iloc[req_idx]['dlng']
-    dlat = REQ_DATA.iloc[req_idx]['dlat']
-    onid = find_nearest_node(olng, olat)
-    dnid = find_nearest_node(dlng, dlat)
-    return onid, dnid
+from config import NETWORK, REQ_DATA, DEADLINE_COE
+from stochastic_shortest_path import get_the_minimum_duration_path, get_the_minimum_duration_path_length, \
+    stochastic_shortest_path, get_path_mean_and_var, get_path_phi
+from approximated_ssp_query import approximated_stochastic_shortest_path
 
 
 def find_out_how_many_trips_will_have_a_differnt_path():
@@ -60,9 +30,10 @@ def find_out_how_many_trips_will_have_a_differnt_path():
 
     while True:
         req_idx += 1
-        onid, dnid = load_trip(req_idx)
-        d = round(get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.2, 2)
-        shortest_path = get_the_minimum_duration_path(NYC_NET, onid, dnid)
+        onid = REQ_DATA.iloc[req_idx]['onid']
+        dnid = REQ_DATA.iloc[req_idx]['dnid']
+        d = get_the_minimum_duration_path_length(NETWORK, onid, dnid) * DEADLINE_COE
+        shortest_path = get_the_minimum_duration_path(NETWORK, onid, dnid)
         best_path = stochastic_shortest_path(d, onid, dnid)
         m_shortest, v_shortest = get_path_mean_and_var(shortest_path)
         m_best, v_best = get_path_mean_and_var(best_path)
@@ -121,8 +92,9 @@ def verify_ssp_assp():
     for req_idx in tqdm(test_idx, desc='req_idx'):
     # while True:
         req_idx += 1
-        onid, dnid = load_trip(req_idx)
-        d = round(get_the_minimum_duration_path_length(NYC_NET, onid, dnid) * 1.2, 2)
+        onid = REQ_DATA.iloc[req_idx]['onid']
+        dnid = REQ_DATA.iloc[req_idx]['dnid']
+        d = round(get_the_minimum_duration_path_length(NETWORK, onid, dnid) * DEADLINE_COE, 2)
         path1 = stochastic_shortest_path(d, onid, dnid)
         path2 = approximated_stochastic_shortest_path(K, d, onid, dnid)
         if path1 != path2:
@@ -137,7 +109,7 @@ def verify_ssp_assp():
 if __name__ == '__main__':
     start_time = time.time()
 
-    find_out_how_many_trips_will_have_a_differnt_path()
-    # verify_ssp_assp()
+    # find_out_how_many_trips_will_have_a_differnt_path()
+    verify_ssp_assp()
 
     print('...running time : %.05f seconds' % (time.time() - start_time))
