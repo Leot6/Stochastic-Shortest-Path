@@ -21,8 +21,12 @@ def get_the_minimum_duration_path(network, origin, dest):
 
 # find the duration of the shortest path from origin to dest in the given network
 def get_the_minimum_duration_path_length(network, origin, dest):
-    duration = nx.shortest_path_length(network, origin, dest, weight='dur')
-    return round(duration, 2)
+    try:
+        duration = nx.shortest_path_length(network, origin, dest, weight='dur')
+        return round(duration, 2)
+    except nx.NetworkXNoPath:
+        print(f'No path between {origin} and {dest}')
+        return 0
 
 
 # given a path, return its mean and variance
@@ -81,9 +85,6 @@ def stochastic_shortest_path(ddl, onid, dnid):
 
     candidate_regions = []
     path_0, mean_0, var_0 = get_lambda_optimal_path(0, onid, dnid)
-
-    print()
-
     phi_0 = get_path_phi(ddl, mean_0, var_0)
     path_inf, mean_inf, var_inf = get_lambda_optimal_path(np.inf, onid, dnid)
     phi_inf = get_path_phi(ddl, mean_inf, var_inf)
@@ -97,11 +98,11 @@ def stochastic_shortest_path(ddl, onid, dnid):
         best_path = path_inf
         phi_best = phi_inf
 
-    print('mean_0', mean_0, 'var_0', var_0, 'phi_path_0', phi_0, 'cdf_0', normal_cdf(ddl, path_0))
-    print('mean_inf', mean_inf, 'var_inf', var_inf, 'phi_path_inf', phi_inf, 'cdf_inf', normal_cdf(ddl, path_inf))
-
-    print('path_0', path_0)
-    print('path_inf', path_inf)
+    # print('mean_0', mean_0, 'var_0', var_0, 'phi_path_0', phi_0, 'cdf_0', normal_cdf(ddl, path_0))
+    # print('mean_inf', mean_inf, 'var_inf', var_inf, 'phi_path_inf', phi_inf, 'cdf_inf', normal_cdf(ddl, path_inf))
+    #
+    # print('path_0', path_0)
+    # print('path_inf', path_inf)
 
     # region: (left path, right path)
     candidate_regions.append(((mean_0, var_0), (mean_inf, var_inf)))
@@ -127,7 +128,7 @@ def stochastic_shortest_path(ddl, onid, dnid):
         if phi_probe_right > phi_best:
             candidate_regions.append(((mean_new, var_new), (mean_right, var_right)))
 
-        print('lambda', lambda_value, 'm', mean_new, 'v', var_new, 'phi_path', phi_new)
+        # print('lambda', lambda_value, 'm', mean_new, 'v', var_new, 'phi_path', phi_new)
         # if lambda_value > 564:
         #     print('case: large lambda!!')
         #     quit()
