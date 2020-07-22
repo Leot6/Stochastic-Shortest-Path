@@ -279,11 +279,9 @@ def time_analysis():
     ax_num.set_xlabel('time bins (s)')
     ax_num.set_ylabel('number')
     ax_num.legend(loc=9)
-
     ax_pct = ax_num.twinx()
     ax_pct.set_ylabel('percentage (%)')
     df3[[agg_2_divided_by_1_col, agg2_prob_imp_col]].plot(ax=ax_pct)
-    plt.legend(loc='best')
     plt.tight_layout()
     plt.savefig('./analysis/analysis-for-different-times.png', dpi=300)
     plt.show()
