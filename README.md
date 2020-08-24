@@ -1,7 +1,7 @@
 # Stochastic-Shortest-Path
 
 Computing paths that maximize the probability of arriving at a destination before a given time deadline.
-Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,092 nodes and 9,453 edges. Edges lengths are drawn from normal distributions. 
+Reimplementation of paper [[4]](https://github.com/Leot6/Stochastic-Shortest-Path#references), which is built on ref [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) and ref [[3]](https://github.com/Leot6/Stochastic-Shortest-Path#references). Paper [[2]](https://github.com/Leot6/Stochastic-Shortest-Path#references) is built on ref [[1]](https://github.com/Leot6/Stochastic-Shortest-Path#references). The graph used is Manhattan, consisting of 4,091 nodes and 9,452 edges. Edges lengths are drawn from normal distributions. 
 
 <img src="https://github.com/Leot6/Stochastic-Shortest-Path/blob/master/example.png" width="600">
 
